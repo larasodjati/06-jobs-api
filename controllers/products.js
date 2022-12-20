@@ -1,21 +1,21 @@
 const getAllProducts  = async (req, res) =>{
-    res.send('get all products')
+    res.send('Get All Products')
 }
 
 const getProduct  = async (req, res) =>{
-    res.send('get single product')
+    res.send('Get Single Product')
 }
 
 const createProduct  = async (req, res) =>{
-    res.send('create product')
+    res.json(req.user)
 }
 
 const updateProduct  = async (req, res) =>{
-    res.send('update product')
+    res.send('Update Product')
 }
 
 const deleteProduct  = async (req, res) =>{
-    res.send('delete product')
+    res.send('Delete Product')
 }
 
 module.exports = {
