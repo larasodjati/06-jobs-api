@@ -21,7 +21,7 @@ const UserSchema = new mongoose.Schema({
     },
     password:{
         type:String,
-        required: [true, 'Please provide email'],
+        required: [true, 'Please provide password'],
         minlength: 6,
         //maxlength: 12,-->removed bcs hashed password generated more than 12 char
     },
