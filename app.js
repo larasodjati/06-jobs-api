@@ -28,7 +28,8 @@ app.use(
     windowMs: 15 * 60 * 1000, //15 minutes
     max: 100, // limit each IP to 100 requests per windowMs
   })
-);
+); 
+app.use(express.static('public'));                 
 app.use(express.json());
 // extra packages
 app.use(helmet());
