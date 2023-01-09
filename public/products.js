@@ -165,8 +165,7 @@ document.addEventListener('DOMContentLoaded', () => {
         message.textContent = 'A communications error occurred.'
       }
       suspendInput = false
-    } 
-    else if (e.target === registerButton) {
+    } else if (e.target === registerButton) {
       if (password1.value !== password2.value) {
         message.textContent = 'The passwords entered do not match.'
       } else {
@@ -347,9 +346,9 @@ document.addEventListener('DOMContentLoaded', () => {
             Authorization: `Bearer ${token}`
           }
         })
-      
+
         if (response.status === 200) {
-          message.textContent = 'The products successfully deleted'
+          message.textContent = 'The product was successfully deleted'
           showing.style.display = 'none'
           addingProduct.textContent = 'update'
           thisEvent = new Event('startDisplay')

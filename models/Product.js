@@ -12,9 +12,10 @@ const ProductSchema = new mongoose.Schema({
     maxlength: 100
   },
   opened: {
-    type: String,
-    default: Date,
-    required: [true, '\n Please provide date opened with format: mm-dd-yyyy'],
+    type: Date,
+    transform: v => v.toLocaleDateString(),
+    required: [true, '\n Please provide date opened with format: mm-dd-yyyy']
+
   },
   validity: {
     type: String,

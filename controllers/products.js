@@ -5,6 +5,9 @@ const { capitalizeProductName, capitalizeProductCategory } = require('../utils/c
 
 const getAllProducts = async (req, res) => {
   // res.send('Get All Products');
+
+  // const { page = 1, limit = 5 } = req.query
+  // const products = await Product.find().limit(limit*1).skip((page-1)*limit)
   const products = await Product.find({ createdBy: req.user.userId }).sort('createdAt')
   res.status(StatusCodes.OK).json({ products, count: products.length })
 }
