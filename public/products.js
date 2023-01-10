@@ -18,7 +18,7 @@ async function buildProductsTable (productsTable, productsTableHeader, token, me
           const editButton = `<td><button type="button" class="editButton" data-id=${data.products[i]._id}>edit</button></td>`
           const deleteButton = `<td><button type="button" class="deleteButton" data-id=${data.products[i]._id}>delete</button></td>`
           const rowHTML = `<td>${data.products[i].brand}</td><td>${data.products[i].category}</td><td>${data.products[i].opened}</td>
-            <td>${data.products[i].validity}</td><td>${data.products[i].status}</td>${editButton}${deleteButton}`
+            <td>${data.products[i].validity}</td><td>${data.products[i].expirationDate}</td><td>${data.products[i].status}</td>${editButton}${deleteButton}`
           const rowEntry = document.createElement('tr')
           rowEntry.innerHTML = rowHTML
           children.push(rowEntry)
@@ -63,6 +63,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const category = document.getElementById('category')
   const opened = document.getElementById('opened')
   const validity = document.getElementById('validity')
+  const expirationDate = document.getElementById('expirationDate')
   const status = document.getElementById('status')
   const addingProduct = document.getElementById('adding-product')
   const productsMessage = document.getElementById('products-message')
@@ -212,6 +213,7 @@ document.addEventListener('DOMContentLoaded', () => {
       category.value = ''
       opened.value = ''
       validity.value = ''
+      expirationDate.value = ''
       status.value = 'new'
       addingProduct.textContent = 'add'
     } else if (e.target === editCancel) {
@@ -220,6 +222,7 @@ document.addEventListener('DOMContentLoaded', () => {
       category.value = ''
       opened.value = ''
       validity.value = ''
+      expirationDate.value = ''
       status.value = 'new'
       thisEvent = new Event('startDisplay')
       document.dispatchEvent(thisEvent)
@@ -239,6 +242,7 @@ document.addEventListener('DOMContentLoaded', () => {
               category: category.value,
               opened: opened.value,
               validity: validity.value,
+              expirationDate: expirationDate.value,
               status: status.value
             })
           })
@@ -253,6 +257,7 @@ document.addEventListener('DOMContentLoaded', () => {
             category.value = ''
             opened.value = ''
             validity.value = ''
+            expirationDate.value = ''
             status.value = 'new'
           } else {
             // failure
@@ -278,6 +283,7 @@ document.addEventListener('DOMContentLoaded', () => {
               category: category.value,
               opened: opened.value,
               validity: validity.value,
+              expirationDate: expirationDate.value,
               status: status.value
             })
           })
@@ -289,6 +295,7 @@ document.addEventListener('DOMContentLoaded', () => {
             category.value = ''
             opened.value = ''
             validity.value = ''
+            expirationDate.value = ''
             status.value = 'new'
             thisEvent = new Event('startDisplay')
             document.dispatchEvent(thisEvent)
@@ -318,6 +325,7 @@ document.addEventListener('DOMContentLoaded', () => {
           category.value = data.product.category
           opened.value = data.product.opened
           validity.value = data.product.validity
+          expirationDate.value = data.product.expirationDate
           status.value = data.product.status
           showing.style.display = 'none'
           showing = editProduct

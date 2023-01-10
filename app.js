@@ -12,7 +12,7 @@ const app = express()
 
 // connectDB
 const connectDB = require('./db/connect')
-const authenticateUser = require('./middleware/authentication')
+const authenticateUser = require('./middleware/authentication') // used in product routes to protet all product routes
 
 // routers
 const authRouter = require('./routes/auth')

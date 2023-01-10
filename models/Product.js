@@ -23,17 +23,23 @@ const ProductSchema = new mongoose.Schema({
     maxlength: 4
 
   },
+  expirationDate: {
+    type: Date,
+    transform: v => v.toLocaleDateString(),
+    required: [true, '\n Please provide date opened with format: mm-dd-yyyy']
+
+  },
   status: {
     type: String,
     enum: ['new', 'in-use', 'expired'],
     default: 'new'
   },
-  createdBy: {
+  createdBy: { // tie the product to the actual user
     type: mongoose.Types.ObjectId,
-    ref: 'User',
+    ref: 'User', // which model that we are referencing
     required: [true, 'Please provide user']
   }
 
-}, { timestamps: true })
+}, { timestamps: true }) // automatically managed our createdAt and updatedAt in our document
 
 module.exports = mongoose.model('Product', ProductSchema)
