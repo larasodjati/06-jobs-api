@@ -13,7 +13,6 @@ const ProductSchema = new mongoose.Schema({
   },
   opened: {
     type: Date,
-    transform: v => v.toLocaleDateString(),
     required: [true, '\n Please provide date opened with format: mm-dd-yyyy']
 
   },
@@ -25,7 +24,6 @@ const ProductSchema = new mongoose.Schema({
   },
   expirationDate: {
     type: Date,
-    transform: v => v.toLocaleDateString(),
     required: [true, '\n Please provide date opened with format: mm-dd-yyyy']
 
   },
@@ -40,6 +38,6 @@ const ProductSchema = new mongoose.Schema({
     required: [true, 'Please provide user']
   }
 
-}, { timestamps: true }) // automatically managed our createdAt and updatedAt in our document
+}, { timestamps: true }) // automatically manage our createdAt and updatedAt in our document
 
 module.exports = mongoose.model('Product', ProductSchema)

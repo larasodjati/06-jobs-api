@@ -34,7 +34,7 @@ const createProduct = async (req, res) => {
   req.body.brand = capitalizeProductName(req.body.brand)
   req.body.category = capitalizeProductCategory(req.body.category)
   const product = await Product.create(req.body)
-   
+
   res.status(StatusCodes.CREATED).json({ product })
 }
 
@@ -47,7 +47,7 @@ const updateProduct = async (req, res) => {
     params: { id: productId }
   } = req
 
-  if (brand === '' || category === '' || opened === '' || validity === '' || expirationDate) {
+  if (brand === '' || category === '' || opened === '' || validity === '' || expirationDate === '') {
     throw new BadRequestError('Brand, Category, Opened, Validity, and Expiration Date fields cannot be empty')
   }
   const product = await Product.findByIdAndUpdate({ _id: productId, createdBy: userId }, req.body, {

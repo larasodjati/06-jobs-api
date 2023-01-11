@@ -1,3 +1,5 @@
+
+
 async function buildProductsTable (productsTable, productsTableHeader, token, message) {
   try {
     const response = await fetch('/api/v1/products', {
@@ -11,10 +13,15 @@ async function buildProductsTable (productsTable, productsTableHeader, token, me
     const children = [productsTableHeader]
     if (response.status === 200) {
       if (data.count === 0) {
-        productsTable.replaceChildren(...children) // clear this for safety
+        //productsTable.replaceChildren(...children) // clear this for safety
         return 0
       } else {
-        for (let i = 0; i < data.products.length; i++) {
+        for (let i = 0; i < data.products.length; i++) { // --for each products
+         
+            // convert opened and expiration date into user friendly format
+            data.products[i].opened = new Date(data.products[i].opened).toLocaleDateString()
+            data.products[i].expirationDate = new Date(data.products[i].expirationDate).toLocaleDateString()
+
           const editButton = `<td><button type="button" class="editButton" data-id=${data.products[i]._id}>edit</button></td>`
           const deleteButton = `<td><button type="button" class="deleteButton" data-id=${data.products[i]._id}>delete</button></td>`
           const rowHTML = `<td>${data.products[i].brand}</td><td>${data.products[i].category}</td><td>${data.products[i].opened}</td>
@@ -32,6 +39,7 @@ async function buildProductsTable (productsTable, productsTableHeader, token, me
     }
   } catch (err) {
     message.textContent = 'A communication error occurred.'
+    console.log(err)
     return 0
   }
 }
@@ -68,6 +76,26 @@ document.addEventListener('DOMContentLoaded', () => {
   const addingProduct = document.getElementById('adding-product')
   const productsMessage = document.getElementById('products-message')
   const editCancel = document.getElementById('edit-cancel')
+
+  // class MyElement extends HTMLElement{
+  //   constructor(){
+  //     super()
+  //     const shadowRoot = this.attachShadow({mode: 'open'})
+  //     shadowRoot.innerHTML = `
+  //     <div>
+  //       <style>${textOfDatepickersCSS}</style>
+  //       <input />
+  //     </div>
+  //     `
+  //     this.input = shadowRoot.querySelector('opened')
+  //   }
+  //   connectedCallback(){
+  //     datepicker(this.input)
+  //   }
+  // }
+  // customElements.define('my-element', MyElement)
+
+  // const pickerOpened = datepicker('opened')
 
   // section 2
   let showing = logonRegister
@@ -211,7 +239,7 @@ document.addEventListener('DOMContentLoaded', () => {
       delete editProduct.dataset.id
       brand.value = ''
       category.value = ''
-      opened.value = ''
+      opened.value = ''// pickerOpened
       validity.value = ''
       expirationDate.value = ''
       status.value = 'new'
@@ -220,7 +248,7 @@ document.addEventListener('DOMContentLoaded', () => {
       showing.style.display = 'none'
       brand.value = ''
       category.value = ''
-      opened.value = ''
+      opened.value = '' // pickerOpened
       validity.value = ''
       expirationDate.value = ''
       status.value = 'new'
@@ -255,7 +283,7 @@ document.addEventListener('DOMContentLoaded', () => {
             document.dispatchEvent(thisEvent)
             brand.value = ''
             category.value = ''
-            opened.value = ''
+            opened.value = ''// pickerOpened
             validity.value = ''
             expirationDate.value = ''
             status.value = 'new'
@@ -293,7 +321,7 @@ document.addEventListener('DOMContentLoaded', () => {
             showing.style.display = 'none'
             brand.value = ''
             category.value = ''
-            opened.value = ''
+            opened.value = '' // pickerOpened
             validity.value = ''
             expirationDate.value = ''
             status.value = 'new'
