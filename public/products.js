@@ -11,15 +11,21 @@ async function buildProductsTable (productsTable, productsTableHeader, token, me
     const children = [productsTableHeader]
     if (response.status === 200) {
       if (data.count === 0) {
-        //productsTable.replaceChildren(...children) // clear this for safety\
+        //productsTable.replaceChildren(...children) // clear this for safety
         return 0
       } else {
         for (let i = 0; i < data.products.length; i++) { // --for each products
-         
-            // convert opened and expiration date into user friendly format
-            
-            data.products[i].opened = new Date(data.products[i].opened).toLocaleDateString()
-            data.products[i].expirationDate = new Date(data.products[i].expirationDate).toLocaleDateString()
+        
+          // convert opened and expiration date into user friendly form
+          // Opened
+          const openedUTC = new Date(data.products[i].opened)
+          const offsetOpened = openedUTC.getTimezoneOffset() * 60000;
+          data.products[i].opened = new Date(openedUTC.getTime() + offsetOpened).toLocaleDateString()
+          
+          // Exp Date
+          const expiredUTC = new Date(data.products[i].expirationDate)
+          const offsetExpired = expiredUTC.getTimezoneOffset() * 60000
+          data.products[i].expirationDate = new Date(expiredUTC.getTime() + offsetExpired).toLocaleDateString()
 
           const editButton = `<td><button type="button" class="editButton" data-id=${data.products[i]._id}>edit</button></td>`
           const deleteButton = `<td><button type="button" class="deleteButton" data-id=${data.products[i]._id}>delete</button></td>`
@@ -75,6 +81,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const addingProduct = document.getElementById('adding-product')
   const productsMessage = document.getElementById('products-message')
   const editCancel = document.getElementById('edit-cancel')
+  const notification = document.getElementById('notification')
+  const expiredProducts = document.getElementById('expired-products')
 
 
   // section 2
@@ -85,6 +93,7 @@ document.addEventListener('DOMContentLoaded', () => {
     token = localStorage.getItem('token')
     if (token) {
       // if the user is logged in
+      notification.style.display = ''
       logoff.style.display = 'block'
       const count = await buildProductsTable(
         productsTable,
@@ -213,6 +222,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     } // section 4
     else if (e.target === addProduct) {
+      expiredProducts.style.display = 'none'
       showing.style.display = 'none'
       editProduct.style.display = 'block'
       showing = editProduct
@@ -225,10 +235,11 @@ document.addEventListener('DOMContentLoaded', () => {
       status.value = 'new'
       addingProduct.textContent = 'add'
     } else if (e.target === editCancel) {
+      expiredProducts.style.display = 'none'
       showing.style.display = 'none'
       brand.value = ''
       category.value = ''
-      opened.value = '' // pickerOpened
+      opened.value = '' 
       validity.value = ''
       expirationDate.value = ''
       status.value = 'new'
@@ -289,9 +300,9 @@ document.addEventListener('DOMContentLoaded', () => {
             body: JSON.stringify({
               brand: brand.value,
               category: category.value,
-              opened: new Date(opened.value).toISOString(),
+              opened: opened.value,   //new Date(opened.value).toISOString(),
               validity: validity.value,
-              expirationDate: new Date(expirationDate.value).toISOString(),
+              expirationDate: expirationDate.value, // new Date(expirationDate.value).toISOString(),
               status: status.value
             })
           })
@@ -377,5 +388,32 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       suspendInput = false
     }
+  
   })
+
+  
+  
 })
+
+// set up the notification for expiration date 
+const button = document.querySelector('button')
+button.addEventListener('click', () => {
+  Notification.requestPermission().then(perm => {
+    if(perm !== 'granted'){
+      alert('you need to allow push notifications')
+    }else{
+      const notification = new Notification('This product has been expired', {
+        body: 'hi',
+        data: { hi : 'hello'},
+        tag: 'new message'
+      })
+    }
+      
+    notification.addEventListener('error', e=>{
+                alert('error')
+        })
+    
+  })
+
+})
+

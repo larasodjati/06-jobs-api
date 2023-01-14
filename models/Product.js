@@ -17,10 +17,8 @@ const ProductSchema = new mongoose.Schema({
 
   },
   validity: {
-    type: String,
-    required: [true, '\n Please provide validity with format number-months(nm)'],
-    maxlength: 4
-
+    type: Number,
+    required: [true, '\n Please provide validity with number'],  
   },
   expirationDate: {
     type: Date,
