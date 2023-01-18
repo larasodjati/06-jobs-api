@@ -80,7 +80,16 @@
             </div>
             <div>
                 <label for="category">Category:</label>
-                <input type="text" id="category">
+                <select id="category">
+                    <option value="BathBody">BathBody</option>
+                    <option value="Fragrance">Fragrance</option> 
+                    <option value="Hair">Hair</option> 
+                    <option value="HandFoot">HandFoot</option> 
+                    <option value="Lips">Lips</option> 
+                    <option value="Makeup">Makeup</option>
+                    <option value="Skincare">Skincare</option>
+                    <option value="Vitamin">Vitamin</option>
+                </select>
             </div>
             <div>
                 <label for="opened">Product Opened:</label>
@@ -105,10 +114,14 @@
             <button type="button" id="adding-product">add</button>
             <button type="button" id="edit-cancel">cancel</button>
         </form>
+        <form method="post" enctype="multipart/form-data" action="/products">
+            <input type="file" name="file">
+            <input type="submit" value="Submit">
+        </form>
         <div id = "expired-products">
             <h2>Expired Products</h2>
         </div>
-    </div>
+        
     <script src="./products.js"></script>   
 </body>
 </html>

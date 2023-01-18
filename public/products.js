@@ -11,17 +11,17 @@ async function buildProductsTable (productsTable, productsTableHeader, token, me
     const children = [productsTableHeader]
     if (response.status === 200) {
       if (data.count === 0) {
-        //productsTable.replaceChildren(...children) // clear this for safety
+        // productsTable.replaceChildren(...children) // clear this for safety
         return 0
       } else {
         for (let i = 0; i < data.products.length; i++) { // --for each products
-        
           // convert opened and expiration date into user friendly form
+          // refers to https://stackoverflow.com/questions/17545708/parse-date-without-timezone-javascript/39209842#39209842
           // Opened
           const openedUTC = new Date(data.products[i].opened)
-          const offsetOpened = openedUTC.getTimezoneOffset() * 60000;
+          const offsetOpened = openedUTC.getTimezoneOffset() * 60000
           data.products[i].opened = new Date(openedUTC.getTime() + offsetOpened).toLocaleDateString()
-          
+
           // Exp Date
           const expiredUTC = new Date(data.products[i].expirationDate)
           const offsetExpired = expiredUTC.getTimezoneOffset() * 60000
@@ -83,7 +83,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const editCancel = document.getElementById('edit-cancel')
   const notification = document.getElementById('notification')
   const expiredProducts = document.getElementById('expired-products')
-
 
   // section 2
   let showing = logonRegister
@@ -228,7 +227,7 @@ document.addEventListener('DOMContentLoaded', () => {
       showing = editProduct
       delete editProduct.dataset.id
       brand.value = ''
-      category.value = ''
+      category.value = 'Skincare'
       opened.value = ''
       validity.value = ''
       expirationDate.value = ''
@@ -238,8 +237,8 @@ document.addEventListener('DOMContentLoaded', () => {
       expiredProducts.style.display = 'none'
       showing.style.display = 'none'
       brand.value = ''
-      category.value = ''
-      opened.value = '' 
+      category.value = 'Skincare'
+      opened.value = ''
       validity.value = ''
       expirationDate.value = ''
       status.value = 'new'
@@ -273,7 +272,7 @@ document.addEventListener('DOMContentLoaded', () => {
             thisEvent = new Event('startDisplay')
             document.dispatchEvent(thisEvent)
             brand.value = ''
-            category.value = ''
+            category.value = 'Skincare'
             opened.value = ''
             validity.value = ''
             expirationDate.value = ''
@@ -300,19 +299,20 @@ document.addEventListener('DOMContentLoaded', () => {
             body: JSON.stringify({
               brand: brand.value,
               category: category.value,
-              opened: opened.value,   //new Date(opened.value).toISOString(),
+              opened: opened.value, // new Date(opened.value).toISOString(),
               validity: validity.value,
               expirationDate: expirationDate.value, // new Date(expirationDate.value).toISOString(),
               status: status.value
             })
           })
           const data = await response.json()
+
           if (response.status === 200) {
             message.textContent = 'The entry was updated.'
             showing.style.display = 'none'
             brand.value = ''
-            category.value = ''
-            opened.value = '' 
+            category.value = 'Skincare'
+            opened.value = ''
             validity.value = ''
             expirationDate.value = ''
             status.value = 'new'
@@ -339,6 +339,7 @@ document.addEventListener('DOMContentLoaded', () => {
           }
         })
         const data = await response.json()
+
         if (response.status === 200) {
           brand.value = data.product.brand
           category.value = data.product.category
@@ -346,6 +347,7 @@ document.addEventListener('DOMContentLoaded', () => {
           validity.value = data.product.validity
           expirationDate.value = data.product.expirationDate
           status.value = data.product.status
+          expiredProducts.style.display = 'none'
           showing.style.display = 'none'
           showing = editProduct
           showing.style.display = 'block'
@@ -388,32 +390,25 @@ document.addEventListener('DOMContentLoaded', () => {
       }
       suspendInput = false
     }
-  
   })
-
-  
-  
 })
 
-// set up the notification for expiration date 
-const button = document.querySelector('button')
-button.addEventListener('click', () => {
-  Notification.requestPermission().then(perm => {
-    if(perm !== 'granted'){
-      alert('you need to allow push notifications')
-    }else{
-      const notification = new Notification('This product has been expired', {
-        body: 'hi',
-        data: { hi : 'hello'},
-        tag: 'new message'
-      })
-    }
-      
-    notification.addEventListener('error', e=>{
-                alert('error')
-        })
-    
-  })
+// // set up the notification for expiration date
+// const button = document.querySelector('button')
+// button.addEventListener('click', () => {
+//   Notification.requestPermission().then(perm => {
+//     if (perm !== 'granted') {
+//       alert('you need to allow push notifications')
+//     } else {
+//       const notification = new Notification('This product has been expired', {
+//         body: 'hi',
+//         data: { hi: 'hello' },
+//         tag: 'new message'
+//       })
+//     }
 
-})
-
+//     notification.addEventListener('error', e => {
+//       alert('error')
+//     })
+//   })
+// })

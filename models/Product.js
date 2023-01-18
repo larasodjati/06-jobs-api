@@ -8,8 +8,9 @@ const ProductSchema = new mongoose.Schema({
   },
   category: {
     type: String,
-    required: [true, '\n Please provide product type'],
-    maxlength: 100
+    enum: ['BathBody', 'Fragrance', 'Hair', 'HandFoot', 'Lips', 'Makeup', 'Skincare', 'Vitamin' ],
+    default: 'Skincare'
+
   },
   opened: {
     type: Date,
@@ -18,7 +19,7 @@ const ProductSchema = new mongoose.Schema({
   },
   validity: {
     type: Number,
-    required: [true, '\n Please provide validity with number'],  
+    required: [true, '\n Please provide validity with number']
   },
   expirationDate: {
     type: Date,

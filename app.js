@@ -12,11 +12,15 @@ const app = express()
 
 // connectDB
 const connectDB = require('./db/connect')
-const authenticateUser = require('./middleware/authentication') // used in product routes to protet all product routes
+const authenticateUser = require('./middleware/authentication') // used in product routes to protect all product routes
 
 // routers
 const authRouter = require('./routes/auth')
 const productsRouter = require('./routes/products')
+
+// upload file
+
+const upload = require('./utils/uploadFile')
 
 // error handler
 const notFoundMiddleware = require('./middleware/not-found')
@@ -39,6 +43,14 @@ app.use(xss())
 // routes
 app.use('/api/v1/auth', authRouter)
 app.use('/api/v1/products', authenticateUser, productsRouter)
+
+// routes for upload file
+app.use('/api/v1/products/upload', authenticateUser, upload.single('image'), (req, res, next) =>{
+  if (!req.file)
+      return res.send('Please upload a file')
+    var tempPath = req.file.path
+      console.log(tempPath);
+})
 
 /* app.get('/', (req, res) => {
   res.send('jobs api');
