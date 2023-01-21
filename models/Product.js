@@ -8,8 +8,8 @@ const ProductSchema = new mongoose.Schema({
   },
   category: {
     type: String,
-    enum: ['BathBody', 'Fragrance', 'Hair', 'HandFoot', 'Lips', 'Makeup', 'Skincare', 'Vitamin' ],
-    default: 'Skincare'
+    enum: ['Bathbody', 'Fragrance', 'Hair', 'Handfoot', 'Lips', 'Makeup', 'Skincare', 'Vitamin'],
+    default: 'skincare'
 
   },
   opened: {

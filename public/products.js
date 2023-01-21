@@ -4,8 +4,8 @@ async function buildProductsTable (productsTable, productsTableHeader, token, me
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${token}`
-      }
+        Authorization: `Bearer ${token}`,
+      },
     })
     const data = await response.json()
     const children = [productsTableHeader]
@@ -34,6 +34,7 @@ async function buildProductsTable (productsTable, productsTableHeader, token, me
           const rowEntry = document.createElement('tr')
           rowEntry.innerHTML = rowHTML
           children.push(rowEntry)
+
         }
         productsTable.replaceChildren(...children)
       }
@@ -83,6 +84,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const editCancel = document.getElementById('edit-cancel')
   const notification = document.getElementById('notification')
   const expiredProducts = document.getElementById('expired-products')
+  const expiredList = expiredProducts.querySelector('ul')
+  
 
   // section 2
   let showing = logonRegister
@@ -112,6 +115,7 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
       logonRegister.style.display = 'block'
     }
+    
   })
 
   let thisEvent = new Event('startDisplay')
@@ -221,23 +225,21 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     } // section 4
     else if (e.target === addProduct) {
-      expiredProducts.style.display = 'none'
       showing.style.display = 'none'
       editProduct.style.display = 'block'
       showing = editProduct
       delete editProduct.dataset.id
       brand.value = ''
-      category.value = 'Skincare'
+      category.value = 'skincare'
       opened.value = ''
       validity.value = ''
       expirationDate.value = ''
       status.value = 'new'
       addingProduct.textContent = 'add'
     } else if (e.target === editCancel) {
-      expiredProducts.style.display = 'none'
       showing.style.display = 'none'
       brand.value = ''
-      category.value = 'Skincare'
+      category.value = 'skincare'
       opened.value = ''
       validity.value = ''
       expirationDate.value = ''
@@ -272,7 +274,7 @@ document.addEventListener('DOMContentLoaded', () => {
             thisEvent = new Event('startDisplay')
             document.dispatchEvent(thisEvent)
             brand.value = ''
-            category.value = 'Skincare'
+            category.value = 'skincare'
             opened.value = ''
             validity.value = ''
             expirationDate.value = ''
@@ -306,12 +308,19 @@ document.addEventListener('DOMContentLoaded', () => {
             })
           })
           const data = await response.json()
-
+          // create list of expired products
+          if(status.value === 'expired'){
+            for(let i = 0; i < data.products.length; i++){
+              let listProduct = document.createElement('li') 
+              listProduct.innerHTML = data.products[i].status
+              expiredList.appendChild(listProduct)
+            }
+          }
           if (response.status === 200) {
             message.textContent = 'The entry was updated.'
             showing.style.display = 'none'
             brand.value = ''
-            category.value = 'Skincare'
+            category.value = 'skincare'
             opened.value = ''
             validity.value = ''
             expirationDate.value = ''
@@ -324,6 +333,7 @@ document.addEventListener('DOMContentLoaded', () => {
         } catch (err) {
           message.textContent = 'A communication error occurred.'
         }
+        
       }
       suspendInput = false
     } // section 5
@@ -347,12 +357,12 @@ document.addEventListener('DOMContentLoaded', () => {
           validity.value = data.product.validity
           expirationDate.value = data.product.expirationDate
           status.value = data.product.status
-          expiredProducts.style.display = 'none'
           showing.style.display = 'none'
           showing = editProduct
           showing.style.display = 'block'
           addingProduct.textContent = 'update'
           message.textContent = ''
+          
         } else {
           // might happen if the list has been updated since last display
           message.textContent = 'The products entry was not found'
@@ -362,6 +372,7 @@ document.addEventListener('DOMContentLoaded', () => {
       } catch (err) {
         message.textContent = 'A communications error has occurred.'
       }
+      
       suspendInput = false
     } // DELETE
     else if (e.target.classList.contains('deleteButton')) {

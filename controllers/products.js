@@ -3,35 +3,13 @@ const { StatusCodes } = require('http-status-codes')
 const { BadRequestError, NotFoundError } = require('../errors')
 const { capitalizeProductName, capitalizeProductCategory } = require('../utils/capitalize')
 
-
 const getAllProducts = async (req, res) => {
-  // res.send('Get All Products');
-  // refers to https://www.geeksforgeeks.org/how-to-do-pagination-in-node-js-using-sorting-ids/
-  // try {
-  //   let { page, size } = req.query
-  //   // if the page is not applied in query
-  //   if (!page) {
-  //     // make the default value one
-  //     page = 1
-  //   }
-  //   if (!size) {
-  //     // make the default limit page
-  //     size = 5
-  //   }
-
-  //   // we have to make it integer because the query parameter passed is string
-  //   const limit = parseInt(size)
-  //   // sorting data based on time creation
-  //   const products = await Product.find({ createdBy: req.user.userId }).sort('createdAt').limit(limit * 1).skip((page - 1) * limit)
-  //   res.status(StatusCodes.OK).json({ page, size, products, count: products.length})
-  // } catch (error) {
-  //   res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(message)
-  // }
-
-  const products = await Product.find({createdBy:req.user.userId}).sort('createdAt')
-  res.status(StatusCodes.OK).json({products, count: products.length})
-
+  let sort = {brand: 1}
+  const products = await Product.find({createdBy:req.user.userId}).sort(sort)
+  res.status(StatusCodes.OK).json({products, count:products.length}) 
+  
 }
+
 
 const getProduct = async (req, res) => {
   // res.send('Get Single Product');
@@ -51,7 +29,6 @@ const getProduct = async (req, res) => {
 }
 
 const createProduct = async (req, res) => {
- 
   req.body.createdBy = req.user.userId
   req.body.brand = capitalizeProductName(req.body.brand)
   req.body.category = capitalizeProductCategory(req.body.category)
@@ -100,8 +77,6 @@ const deleteProduct = async (req, res) => {
   }
   res.status(StatusCodes.OK).json({ msg: 'The entry was deleted' })
 }
-
-
 
 module.exports = {
   getAllProducts,
