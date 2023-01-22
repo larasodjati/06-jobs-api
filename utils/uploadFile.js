@@ -5,11 +5,10 @@ const storage = multer.diskStorage(
         destination: function(req, file, cb) 
         {
             cb(null, __dirname + '/uploads')
-            require('fs').writeFileSync('text.txt', 'hello world')
         },
         filename: function(req, file, cb)
         {
-            cb(null, new Date().toISOString() + file.originalname)
+            cb(null, new Date().getTime().toString() + '-' + file.originalname)
         }
     })
 
