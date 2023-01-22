@@ -308,14 +308,16 @@ document.addEventListener('DOMContentLoaded', () => {
             })
           })
           const data = await response.json()
+          
           // create list of expired products
-          if(status.value === 'expired'){
+       
             for(let i = 0; i < data.products.length; i++){
-              let listProduct = document.createElement('li') 
-              listProduct.innerHTML = data.products[i].status
-              expiredList.appendChild(listProduct)
+              if(data.products[i].status === 'expired'){
+                let listProduct = document.createElement('li') 
+                listProduct.innerHTML = data.products[i].brand
+                expiredList.appendChild(listProduct)
+              }
             }
-          }
           if (response.status === 200) {
             message.textContent = 'The entry was updated.'
             showing.style.display = 'none'

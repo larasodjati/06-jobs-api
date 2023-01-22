@@ -45,10 +45,12 @@ app.use('/api/v1/auth', authRouter)
 app.use('/api/v1/products', authenticateUser, productsRouter)
 
 // routes for upload file
-app.use('/api/v1/products/upload', authenticateUser, upload.single('image'), (req, res, next) => {
-  if (!req.file) { return res.send('Please upload a file') }
-  const tempPath = req.file.path
-  console.log(tempPath)
+app.use('/api/v1/products/upload', authenticateUser, upload.single('image'), (req, res, next) =>{
+  if (!req.file) {
+      return res.send('Please upload a file')
+  }
+
+  res.send('OK\n')
 })
 
 /* app.get('/', (req, res) => {
